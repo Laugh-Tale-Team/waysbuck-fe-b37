@@ -5,6 +5,8 @@ import "../assets/styles.css";
 import TransModal from "../components/modal/transModal";
 import NavbarAdmin from "../components/navbarAdmin";
 import convertRupiah from "rupiah-format";
+import { API } from "../config/api";
+import { useQuery } from "react-query";
 
 export default function IncomeTransaction() {
   let { data: transactions } = useQuery("transactionsCache", async () => {
