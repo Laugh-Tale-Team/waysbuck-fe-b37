@@ -15,6 +15,12 @@ export default function IncomeTransaction() {
   };
   const handleClose = () => setTransShow(false);
   console.log(setTransShow);
+
+  let { data: transactions } = useQuery("transactionsCache", async () => {
+    const response = await API.get("/transactions");
+    return response.data.data;
+  });
+
   return (
     <div>
       <NavbarAdmin />
@@ -43,14 +49,18 @@ export default function IncomeTransaction() {
               Close={handleClose}
               id={orderId}
             />
-            {dataIncome.map((item, index) => (
-              <tr onClick={() => handleTrans(item.id)} key={index}>
+            {transactions.map((item, index) => (
+              <tr onClick={() => handleTrans(item?.id)} key={index}>
                 <td>{index + 1}</td>
-                <td style={{ border: "1px solid grey" }}>{item.name}</td>
-                <td style={{ border: "1px solid grey" }}>{item.address}</td>
-                <td style={{ border: "1px solid grey" }}>{item.postcode}</td>
+                <td style={{ border: "1px solid grey" }}>{item?.user.name}</td>
                 <td style={{ border: "1px solid grey" }}>
-                  {convertRupiah.convert(item.income)}
+                  {item?.user.profile?.address}
+                </td>
+                <td style={{ border: "1px solid grey" }}>
+                  {item?.user.profile?.postal_code}
+                </td>
+                <td style={{ border: "1px solid grey" }}>
+                  {convertRupiah.convert(item?.total)}
                 </td>
                 <td
                   className={item.status}
