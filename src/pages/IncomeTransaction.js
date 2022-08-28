@@ -5,15 +5,8 @@ import "../assets/styles.css";
 import TransModal from "../components/modal/transModal";
 import NavbarAdmin from "../components/navbarAdmin";
 import convertRupiah from "rupiah-format";
-import { API } from "../config/api";
-import { useQuery } from "react-query";
 
 export default function IncomeTransaction() {
-  let { data: transactions } = useQuery("transactionsCache", async () => {
-    const response = await API.get("/transactions");
-    return response.data.data;
-  });
-  console.log(transactions);
   const [transShow, setTransShow] = useState(false);
   const [orderId, setOrderId] = useState(null);
   const handleTrans = (id) => {
@@ -50,21 +43,17 @@ export default function IncomeTransaction() {
               Close={handleClose}
               id={orderId}
             />
-            {transactions.map((item, index) => (
+            {dataIncome.map((item, index) => (
               <tr onClick={() => handleTrans(item.id)} key={index}>
                 <td>{index + 1}</td>
-                <td style={{ border: "1px solid grey" }}>{item?.user.name}</td>
+                <td style={{ border: "1px solid grey" }}>{item.name}</td>
+                <td style={{ border: "1px solid grey" }}>{item.address}</td>
+                <td style={{ border: "1px solid grey" }}>{item.postcode}</td>
                 <td style={{ border: "1px solid grey" }}>
-                  {item?.user.profile?.address}
-                </td>
-                <td style={{ border: "1px solid grey" }}>
-                  {item?.user.profile?.postal_code}
-                </td>
-                <td style={{ border: "1px solid grey" }}>
-                  {convertRupiah.convert(item?.total)}
+                  {convertRupiah.convert(item.income)}
                 </td>
                 <td
-                  className={item?.status}
+                  className={item.status}
                   style={{ border: "1px solid grey" }}
                 >
                   {item.status === "success"
